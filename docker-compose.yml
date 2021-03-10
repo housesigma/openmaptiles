@@ -90,7 +90,7 @@ services:
       # Control tilelive-copy threads
       COPY_CONCURRENCY: ${COPY_CONCURRENCY}
       #
-
+      UV_THREADPOOL_SIZE: ${UV_THREADPOOL_SIZE}
   postserve:
     image: "openmaptiles/openmaptiles-tools:${TOOLS_VERSION}"
     command: "postserve ${TILESET_FILE} --verbose --serve=${OMT_HOST:-http://localhost}:${PPORT:-8090}"
