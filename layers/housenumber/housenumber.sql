@@ -1,5 +1,5 @@
 -- etldoc: layer_housenumber[shape=record fillcolor=lightpink, style="rounded,filled",
--- etldoc:     label="layer_housenumber | <z14_> z14+" ] ;
+-- etldoc:     label="layer_housenumber | <z16_> z16+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_housenumber(bbox geometry, zoom_level integer)
     RETURNS TABLE
@@ -11,7 +11,7 @@ CREATE OR REPLACE FUNCTION layer_housenumber(bbox geometry, zoom_level integer)
 AS
 $$
 SELECT
-    -- etldoc: osm_housenumber_point -> layer_housenumber:z14_
+    -- etldoc: osm_housenumber_point -> layer_housenumber:z16_
     osm_id,
     geometry,
     housenumber
