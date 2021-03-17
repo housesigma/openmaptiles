@@ -23,7 +23,7 @@ FROM (
         row_number() OVER(PARTITION BY concat(street, block_number, housenumber) ORDER BY has_name ASC) as rn
     FROM osm_housenumber_point
     WHERE 1=1
-        AND zoom_level >= 14
+        AND zoom_level >= 16
         AND geometry && bbox
 ) t
 WHERE rn = 1;
