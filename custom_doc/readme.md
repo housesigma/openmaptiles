@@ -8,4 +8,4 @@ Please put in deploy instructions so I can perform the work later.
 
 
 
-### install mbtiles in glserver
+### install mbtiles in tileserver gl
