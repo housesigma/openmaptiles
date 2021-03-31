@@ -57,18 +57,58 @@ FROM (
 
          UNION ALL
 
-         -- etldoc: osm_poi_point ->  layer_poi:z14_
+         -- etldoc: osm_poi_point ->  layer_poi:z14
+         -- etldoc: osm_poi_point ->  layer_poi:z15
          SELECT *,
                 osm_id * 10 AS osm_id_hash
          FROM osm_poi_point
          WHERE geometry && bbox
-           AND zoom_level >= 14
+           AND zoom_level BETWEEN 1 AND 15
+           AND (rank <= 10)
+
+         UNION ALL
+
+         -- etldoc: osm_poi_point ->  layer_poi:z16_
+         SELECT *,
+                osm_id * 10 AS osm_id_hash
+         FROM osm_poi_point
+         WHERE geometry && bbox
+           AND zoom_level >= 16
 
          UNION ALL
 
          -- etldoc: osm_poi_polygon ->  layer_poi:z12
          -- etldoc: osm_poi_polygon ->  layer_poi:z13
-         -- etldoc: osm_poi_polygon ->  layer_poi:z14_
+         SELECT *,
+                NULL::integer AS agg_stop,
+                CASE
+                    WHEN osm_id < 0 THEN -osm_id * 10 + 4
+                    ELSE osm_id * 10 + 1
+                    END AS osm_id_hash
+         FROM osm_poi_polygon
+         WHERE geometry && bbox
+           AND zoom_level BETWEEN 12 AND 13
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal'))
+
+         UNION ALL
+
+         -- etldoc: osm_poi_polygon ->  layer_poi:z14
+         -- etldoc: osm_poi_polygon ->  layer_poi:z15
+         SELECT *,
+                NULL::integer AS agg_stop,
+                CASE
+                    WHEN osm_id < 0 THEN -osm_id * 10 + 4
+                    ELSE osm_id * 10 + 1
+                    END AS osm_id_hash
+         FROM osm_poi_polygon
+         WHERE geometry && bbox
+           AND zoom_level BETWEEN 14 AND 15
+           AND (rank <= 10)
+
+         UNION ALL
+
+         -- etldoc: osm_poi_polygon ->  layer_poi:z16_
          SELECT *,
                 NULL::integer AS agg_stop,
                 CASE
@@ -78,11 +118,11 @@ FROM (
          FROM osm_poi_polygon
          WHERE geometry && bbox AND
            CASE
-               WHEN zoom_level >= 14 THEN TRUE
+               WHEN zoom_level >= 16 THEN TRUE
                WHEN zoom_level >= 12 AND
                  ((subclass = 'station' AND mapping_key = 'railway')
-                 OR subclass IN ('halt', 'ferry_terminal')) THEN TRUE 
-               WHEN zoom_level BETWEEN 10 AND 14 THEN
+                 OR subclass IN ('halt', 'ferry_terminal')) THEN TRUE
+               WHEN zoom_level BETWEEN 10 AND 16 THEN
                  subclass IN ('university', 'college') AND
                  POWER(4,zoom_level)
                  -- Compute percentage of the earth's surface covered by this feature (approximately)
