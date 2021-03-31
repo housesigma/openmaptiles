@@ -63,8 +63,9 @@ FROM (
                 osm_id * 10 AS osm_id_hash
          FROM osm_poi_point
          WHERE geometry && bbox
-           AND zoom_level BETWEEN 1 AND 15
-           AND (rank <= 10)
+           AND zoom_level BETWEEN 14 AND 15
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park'))
 
          UNION ALL
                              
@@ -104,7 +105,8 @@ FROM (
          FROM osm_poi_polygon
          WHERE geometry && bbox
            AND zoom_level BETWEEN 14 AND 15
-           AND (rank <= 10)
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park'))
 
          UNION ALL
                              
