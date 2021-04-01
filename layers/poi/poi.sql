@@ -65,7 +65,7 @@ FROM (
          WHERE geometry && bbox
            AND zoom_level BETWEEN 14 AND 15
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','supermarket','park'))
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop'))
 
          UNION ALL
 
@@ -106,7 +106,7 @@ FROM (
          WHERE geometry && bbox
            AND zoom_level BETWEEN 14 AND 15
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','supermarket','park'))
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop'))
 
          UNION ALL
 
