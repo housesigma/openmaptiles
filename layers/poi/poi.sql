@@ -58,14 +58,24 @@ FROM (
          UNION ALL
                              
          -- etldoc: osm_poi_point ->  layer_poi:z14
+         SELECT *,
+                osm_id * 10 AS osm_id_hash
+         FROM osm_poi_point
+         WHERE geometry && bbox
+           AND zoom_level = 14
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','tram_stop','bus_stop'))
+
+         UNION ALL
+                             
          -- etldoc: osm_poi_point ->  layer_poi:z15
          SELECT *,
                 osm_id * 10 AS osm_id_hash
          FROM osm_poi_point
          WHERE geometry && bbox
-           AND zoom_level BETWEEN 14 AND 15
+           AND zoom_level = 15
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop'))
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
 
          UNION ALL
                              
@@ -95,6 +105,20 @@ FROM (
          UNION ALL
 
          -- etldoc: osm_poi_polygon ->  layer_poi:z14
+         SELECT *,
+                NULL::integer AS agg_stop,
+                CASE
+                    WHEN osm_id < 0 THEN -osm_id * 10 + 4
+                    ELSE osm_id * 10 + 1
+                    END AS osm_id_hash
+         FROM osm_poi_polygon
+         WHERE geometry && bbox
+           AND zoom_level = 14
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','tram_stop','bus_stop'))
+
+         UNION ALL
+
          -- etldoc: osm_poi_polygon ->  layer_poi:z15
          SELECT *,
                 NULL::integer AS agg_stop,
@@ -104,12 +128,12 @@ FROM (
                     END AS osm_id_hash
          FROM osm_poi_polygon
          WHERE geometry && bbox
-           AND zoom_level BETWEEN 14 AND 15
+           AND zoom_level BETWEEN = 15
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop'))
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
 
          UNION ALL
-                             
+
          -- etldoc: osm_poi_polygon ->  layer_poi:z16_
          SELECT *,
                 NULL::integer AS agg_stop,
