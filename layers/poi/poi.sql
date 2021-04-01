@@ -128,7 +128,7 @@ FROM (
                     END AS osm_id_hash
          FROM osm_poi_polygon
          WHERE geometry && bbox
-           AND zoom_level BETWEEN = 15
+           AND zoom_level 15
            AND ((subclass = 'station' AND mapping_key = 'railway')
              OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
 
