@@ -550,7 +550,7 @@
         ["==", "brunnel", "tunnel"],
         ["in", "class", "path", "pedestrian"]
       ],
-      "layout": {"visibility": "visible"},
+      "layout": {"visibility": "none"},
       "paint": {
         "line-color": "rgba(204, 196, 176, 0.45)",
         "line-dasharray": [1, 0.75],
@@ -968,7 +968,7 @@
         ["!in", "brunnel", "bridge", "tunnel"],
         ["in", "class", "path", "pedestrian"]
       ],
-      "layout": {"line-join": "round", "visibility": "visible"},
+      "layout": {"line-join": "round", "visibility": "none"},
       "paint": {
         "line-color": "rgba(204, 196, 176, 0.45)",
         "line-dasharray": [1, 1],
