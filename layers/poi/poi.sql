@@ -1,5 +1,5 @@
 -- etldoc: layer_poi[shape=record fillcolor=lightpink, style="rounded,filled",
--- etldoc:     label="layer_poi | <z12> z12 | <z13> z13 | <z14_> z14+" ] ;
+-- etldoc:     label="layer_poi | <z12> z12 | <z13> z13 | <z14> z14 | <z15> z15 | <z16_> z16+" ] ;
 
 CREATE OR REPLACE FUNCTION layer_poi(bbox geometry, zoom_level integer, pixel_width numeric)
     RETURNS TABLE
@@ -56,13 +56,35 @@ FROM (
              OR subclass IN ('halt', 'ferry_terminal'))
 
          UNION ALL
-
-         -- etldoc: osm_poi_point ->  layer_poi:z14_
+                             
+         -- etldoc: osm_poi_point ->  layer_poi:z14
          SELECT *,
                 osm_id * 10 AS osm_id_hash
          FROM osm_poi_point
          WHERE geometry && bbox
-           AND zoom_level >= 14
+           AND zoom_level = 14
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','tram_stop','bus_stop'))
+
+         UNION ALL
+                             
+         -- etldoc: osm_poi_point ->  layer_poi:z15
+         SELECT *,
+                osm_id * 10 AS osm_id_hash
+         FROM osm_poi_point
+         WHERE geometry && bbox
+           AND zoom_level = 15
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
+
+         UNION ALL
+                             
+         -- etldoc: osm_poi_point ->  layer_poi:z16_
+         SELECT *,
+                osm_id * 10 AS osm_id_hash
+         FROM osm_poi_point
+         WHERE geometry && bbox
+           AND zoom_level >= 16
 
          UNION ALL
 
@@ -82,7 +104,7 @@ FROM (
 
          UNION ALL
 
-         -- etldoc: osm_poi_polygon ->  layer_poi:z14_
+         -- etldoc: osm_poi_polygon ->  layer_poi:z14
          SELECT *,
                 NULL::integer AS agg_stop,
                 CASE
@@ -91,7 +113,37 @@ FROM (
                     END AS osm_id_hash
          FROM osm_poi_polygon
          WHERE geometry && bbox
-           AND zoom_level >= 14
+           AND zoom_level = 14
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','tram_stop','bus_stop'))
+
+         UNION ALL
+
+         -- etldoc: osm_poi_polygon ->  layer_poi:z15
+         SELECT *,
+                NULL::integer AS agg_stop,
+                CASE
+                    WHEN osm_id < 0 THEN -osm_id * 10 + 4
+                    ELSE osm_id * 10 + 1
+                    END AS osm_id_hash
+         FROM osm_poi_polygon
+         WHERE geometry && bbox
+           AND zoom_level = 15
+           AND ((subclass = 'station' AND mapping_key = 'railway')
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
+
+         UNION ALL
+
+         -- etldoc: osm_poi_polygon ->  layer_poi:z16_
+         SELECT *,
+                NULL::integer AS agg_stop,
+                CASE
+                    WHEN osm_id < 0 THEN -osm_id * 10 + 4
+                    ELSE osm_id * 10 + 1
+                    END AS osm_id_hash
+         FROM osm_poi_polygon
+         WHERE geometry && bbox
+           AND zoom_level >= 16
      ) AS poi_union
 ORDER BY "rank"
 $$ LANGUAGE SQL STABLE
