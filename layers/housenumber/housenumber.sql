@@ -16,7 +16,7 @@ SELECT
     geometry,
     housenumber
 FROM osm_housenumber_point
-WHERE zoom_level >= 16
+WHERE zoom_level >= 17
   AND geometry && bbox;
 $$ LANGUAGE SQL STABLE
                 -- STRICT

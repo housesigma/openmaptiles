@@ -41,7 +41,7 @@
       }
     },
     "maptiler-street-custom_v1":{
-      "style":"/data/styles/street_prd_v1.json",
+      "style":"/data/styles/street_toronto_z17.json",
       "tilejson":{
         "type":"overlay",
         "bounds":[
@@ -55,7 +55,7 @@
   },
   "data":{
     "Toronto":{
-      "mbtiles":"Toronto.mbtiles"
+      "mbtiles":"Toronto17.mbtiles"
     }
   }
 }

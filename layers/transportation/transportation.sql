@@ -344,6 +344,7 @@ FROM (
                             NOT ST_IsClosed(geometry)
                         )
              )
+           AND highway_class(highway, public_transport, construction) NOT IN ('track', 'path')
          UNION ALL
 
          -- etldoc: osm_railway_linestring_gen_z8  ->  layer_transportation:z8
@@ -723,6 +724,7 @@ FROM (
                  man_made IN ('bridge', 'pier')
                  OR (is_area AND COALESCE(layer, 0) >= 0)
              )
+           AND highway NOT IN ('path','pedestrian','footway','steps','corridor')
      ) AS zoom_levels
 WHERE geometry && bbox
 ORDER BY z_order ASC;

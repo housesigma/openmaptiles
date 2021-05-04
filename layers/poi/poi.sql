@@ -64,7 +64,7 @@ FROM (
          WHERE geometry && bbox
            AND zoom_level = 14
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','tram_stop','bus_stop'))
+             OR subclass IN ('halt', 'ferry_terminal','tram_stop'))
 
          UNION ALL
                              
@@ -73,18 +73,18 @@ FROM (
                 osm_id * 10 AS osm_id_hash
          FROM osm_poi_point
          WHERE geometry && bbox
-           AND zoom_level = 15
+           AND zoom_level BETWEEN 15 AND 16
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop'))
 
          UNION ALL
                              
-         -- etldoc: osm_poi_point ->  layer_poi:z16_
+         -- etldoc: osm_poi_point ->  layer_poi:z17_
          SELECT *,
                 osm_id * 10 AS osm_id_hash
          FROM osm_poi_point
          WHERE geometry && bbox
-           AND zoom_level >= 16
+           AND zoom_level >= 17
 
          UNION ALL
 
@@ -115,7 +115,7 @@ FROM (
          WHERE geometry && bbox
            AND zoom_level = 14
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','tram_stop','bus_stop'))
+             OR subclass IN ('halt', 'ferry_terminal','tram_stop'))
 
          UNION ALL
 
@@ -128,13 +128,13 @@ FROM (
                     END AS osm_id_hash
          FROM osm_poi_polygon
          WHERE geometry && bbox
-           AND zoom_level = 15
+           AND zoom_level BETWEEN 15 AND 16
            AND ((subclass = 'station' AND mapping_key = 'railway')
-             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop','bus_stop'))
+             OR subclass IN ('halt', 'ferry_terminal','supermarket','park','tram_stop'))
 
          UNION ALL
 
-         -- etldoc: osm_poi_polygon ->  layer_poi:z16_
+         -- etldoc: osm_poi_polygon ->  layer_poi:z17_
          SELECT *,
                 NULL::integer AS agg_stop,
                 CASE
@@ -143,7 +143,7 @@ FROM (
                     END AS osm_id_hash
          FROM osm_poi_polygon
          WHERE geometry && bbox
-           AND zoom_level >= 16
+           AND zoom_level >= 17
      ) AS poi_union
 ORDER BY "rank"
 $$ LANGUAGE SQL STABLE
