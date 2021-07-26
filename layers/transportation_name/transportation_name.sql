@@ -149,6 +149,7 @@ FROM (
                 indoor
          FROM osm_transportation_name_linestring
          WHERE zoom_level >= 14
+           AND highway_class(highway, '', construction) NOT IN ('track', 'path')
      ) AS zoom_levels
 WHERE geometry && bbox
 ORDER BY z_order ASC;

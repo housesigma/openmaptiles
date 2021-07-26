@@ -91,7 +91,7 @@ FROM (
              NULL::text AS colour,
              FALSE AS hide_3d
          FROM osm_building_block_gen_z13
-         WHERE zoom_level = 13
+         WHERE zoom_level BETWEEN 13 AND 14
            AND geometry && bbox
          UNION ALL
          SELECT
@@ -104,11 +104,11 @@ FROM (
                                   colour,
                                   hide_3d
          FROM osm_all_buildings
-         WHERE (levels IS NULL OR levels < 1000)
-           AND (min_level IS NULL OR min_level < 1000)
-           AND (height IS NULL OR height < 3000)
-           AND (min_height IS NULL OR min_height < 3000)
-           AND zoom_level >= 14
+         WHERE (levels IS NULL OR levels < 10)
+           AND (min_level IS NULL OR min_level < 3)
+           AND (height IS NULL OR height < 36)
+           AND (min_height IS NULL OR min_height < 10)
+           AND zoom_level >= 15
            AND geometry && bbox
      ) AS zoom_levels
 ORDER BY render_height ASC, ST_YMin(geometry) DESC;
