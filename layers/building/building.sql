@@ -104,10 +104,10 @@ FROM (
                                   colour,
                                   hide_3d
          FROM osm_all_buildings
-         WHERE (levels IS NULL OR levels < 10)
+         WHERE (levels IS NULL OR levels < 100)
            AND (min_level IS NULL OR min_level < 3)
-           AND (height IS NULL OR height < 36)
-           AND (min_height IS NULL OR min_height < 10)
+           AND (height IS NULL OR height < 1000)
+           AND (min_height IS NULL OR min_height < 30)
            AND zoom_level >= 15
            AND geometry && bbox
      ) AS zoom_levels
