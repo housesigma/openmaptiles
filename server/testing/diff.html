@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>diff</title>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+</head>
+<body>
+<script>
+    function load(url) {
+        const xhr = new XMLHttpRequest();
+
+        const promise = new Promise(function (resolve, reject) {
+            xhr.addEventListener('readystatechange', function () {
+                if (xhr.readyState !== 4) {
+                    return;
+                }
+
+                if (xhr.status !== 200) {
+                    reject(xhr.status);
+                    return;
+                }
+
+                try {
+                    const json = JSON.parse(xhr.responseText);
+                    resolve(json);
+                } catch (e) {
+                    reject(e);
+                }
+            })
+        })
+
+        xhr.open('get', url);
+        xhr.send();
+
+        return promise;
+    }
+
+    (async function main() {
+        const basicJSON = await load('https://ovh06.fangintel.com/styles/basic-preview/style.json');
+        const streetJSON = await load('https://ovh06.fangintel.com/styles/maptiler-street-custom_v1/style.json');
+
+        const basicOnly = _.differenceWith(basicJSON.layers, streetJSON.layers, (a, b) => a.id === b.id);
+        const streetOnly = _.differenceWith(streetJSON.layers, basicJSON.layers, (a, b) => a.id === b.id);
+        const shared = _.intersectionWith(basicJSON.layers, streetJSON.layers, (a, b) => a.id === b.id);
+
+        console.log('只在basic style中存在', basicOnly.map(layer => layer.id));
+        console.log('只在street style中存在', streetOnly.map(layer => layer.id));
+        console.log('两者都有', shared.map(layer => layer.id));
+    })();
+</script>
+</body>
+</html>
