@@ -16,6 +16,7 @@ services:
     # Use "shm_size: 512m" if you want to prevent a possible 'No space left on device' during 'make generate-tiles-pg'
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
     networks:
       - postgres
     ports:
@@ -27,6 +28,8 @@ services:
       POSTGRES_USER: ${PGUSER:-openmaptiles}
       POSTGRES_PASSWORD: ${PGPASSWORD:-openmaptiles}
       PGPORT: ${PGPORT:-5432}
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+
 
   import-data:
     image: "openmaptiles/import-data:${TOOLS_VERSION}"
